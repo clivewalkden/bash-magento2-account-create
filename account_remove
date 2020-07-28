@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# set path to allow calling util subdir files
+source "set_util"
+
+# Ensure no conflicts
+source "${util}remove_constants.sh"
+
+# Set global paths and functions
+source "${util}set_constants.sh"
+
+echo -e "${bg_red}${txt_white}                                   ${txt_end}"
+echo -e "${bg_red}${txt_white}  Setup for removing Magento site  ${txt_end}"
+echo -e "${bg_red}${txt_white}                                   ${txt_end}"
+
+# Set ${domain}
+source "${util}set_domain.sh"
+# Set ${username}
+source "${util}set_username.sh"
+# Remove PHP FPM pool
+source "${util}remove_fpmpool.sh"
+# Remove the user and files
+source "${util}remove_user.sh"
+# Restart services
+source "${util}nginx_graceful.sh"
+
+echo -e "\n${txt_green}Site removed: ${domain}${txt_end}\n"
+
+exit 0

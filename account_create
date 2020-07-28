@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+## Assumptions
+# A ssh key is available to connect to the box
+#
+
+# set path to allow calling util subdir files
+source "set_util"
+
+# Load the menu and help
+source "${util}menu.sh"
+
+# Set global paths and functions
+source "${util}set_constants.sh"
+
+echo -e "${bg_black}${txt_white}                                ${txt_end}"
+echo -e "${bg_black}${txt_white}  Setup for a new Magento site  ${txt_end}"
+echo -e "${bg_black}${txt_white}                                ${txt_end}"
+
+# Set ${domain}
+source "${util}set_domain.sh"
+# Set ${aliases}
+source "${util}set_domain_alias.sh"
+# Set ${username}
+source "${util}set_username.sh"
+# Add user
+source "${util}create_user.sh"
+# Set user password
+source "${util}set_password.sh"
+# Add user account
+source "${util}create_site.sh"
+# Add php-fpm pool
+source "${util}create_fpmpool.sh"
+# Add nginx virtualhost
+source "${util}create_virtualhost.sh"
+# Add database
+source "${util}create_db.sh"
+# Unload ${dbpassword}
+unset -v dbpassword;
+# Restart services
+source "${util}services_graceful.sh"
+
+echo -e "\n${txt_green}Site added: ${domain}${txt_end}\n"
+
+exit 0
