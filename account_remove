@@ -17,12 +17,10 @@ echo -e "${bg_red}${txt_white}                                   ${txt_end}"
 source "${util}set_domain.sh"
 # Set ${username}
 source "${util}set_username.sh"
-# Remove PHP FPM pool
-source "${util}remove_fpmpool.sh"
 # Remove the user and files
 source "${util}remove_user.sh"
 # Restart services
-source "${util}nginx_graceful.sh"
+source "${util}services_graceful.sh"
 
 echo -e "\n${txt_green}Site removed: ${domain}${txt_end}\n"
 
