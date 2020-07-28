@@ -2,72 +2,72 @@
 
 { # this ensures the entire script is downloaded #
 
-dbsync_install_dir() {
-    printf %s "${HOME}/.dbsync"
+install_dir() {
+    printf %s "${HOME}/.sozo/account-create"
 }
 
-dbsync_latest_version() {
-  echo "v1.2.1"
+latest_version() {
+  echo "v1.0.0"
 }
 
 #
 # Outputs the location to DB Sync depending on:
 # * The availability of $GIT_SOURCE
 #
-dbsync_source() {
-  local DBSYNC_METHOD
-  DBSYNC_METHOD="$1"
-  local DBSYNC_SOURCE_URL
-  DBSYNC_SOURCE_URL="https://github.com/clivewalkden/bash-magento2-db-sync.git"
-  echo "$DBSYNC_SOURCE_URL"
+code_source() {
+  local METHOD
+  METHOD="$1"
+  local SOURCE_URL
+  SOURCE_URL="https://github.com/clivewalkden/bash-magento2-account-create.git"
+  echo "$SOURCE_URL"
 }
 
 do_install() {
     local INSTALL_DIR
-    INSTALL_DIR="$(dbsync_install_dir)"
+    INSTALL_DIR="$(install_dir)"
 
     # Downloading to $INSTALL_DIR
     mkdir -p "$INSTALL_DIR"
-    if [ -f "$INSTALL_DIR/db-sync.sh" ]; then
-        echo "=> db-sync is already installed in $INSTALL_DIR, trying to update the script"
+    if [ -f "$INSTALL_DIR/account_create" ]; then
+        echo "=> account_create is already installed in $INSTALL_DIR, trying to update the script"
     else
-        echo "=> Downloading db-sync as script to '$INSTALL_DIR'"
+        echo "=> Downloading account_create as script to '$INSTALL_DIR'"
     fi
 
     if [ -d "$INSTALL_DIR/.git" ]; then
-        echo "=> db-sync is already installed in $INSTALL_DIR, trying to update using git"
+        echo "=> account_create is already installed in $INSTALL_DIR, trying to update using git"
         command printf '\r=> '
-        command git --git-dir="$INSTALL_DIR"/.git --work-tree="$INSTALL_DIR" fetch origin tag "$(dbsync_latest_version)" --depth=1 2> /dev/null || {
-        echo >&2 "Failed to update db-sync, run 'git fetch' in $INSTALL_DIR yourself."
+        command git --git-dir="$INSTALL_DIR"/.git --work-tree="$INSTALL_DIR" fetch origin tag "$(latest_version)" --depth=1 2> /dev/null || {
+        echo >&2 "Failed to update account_create, run 'git fetch' in $INSTALL_DIR yourself."
         exit 1
         }
     else
         # Cloning to $INSTALL_DIR
-        echo "=> Downloading db-sync from git to '$INSTALL_DIR'"
+        echo "=> Downloading account_create from git to '$INSTALL_DIR'"
         command printf '\r=> '
         mkdir -p "${INSTALL_DIR}"
         if [ "$(ls -A "${INSTALL_DIR}")" ]; then
         command git init "${INSTALL_DIR}" || {
-            echo >&2 'Failed to initialize db-sync repo. Please report this!'
+            echo >&2 'Failed to initialize account_create repo. Please report this!'
             exit 2
         }
-        command git --git-dir="${INSTALL_DIR}/.git" remote add origin "$(dbsync_source)" 2> /dev/null \
-            || command git --git-dir="${INSTALL_DIR}/.git" remote set-url origin "$(dbsync_source)" || {
+        command git --git-dir="${INSTALL_DIR}/.git" remote add origin "$(code_source)" 2> /dev/null \
+            || command git --git-dir="${INSTALL_DIR}/.git" remote set-url origin "$(code_source)" || {
             echo >&2 'Failed to add remote "origin" (or set the URL). Please report this!'
             exit 2
         }
-        command git --git-dir="${INSTALL_DIR}/.git" fetch origin tag "$(dbsync_latest_version)" --depth=1 || {
+        command git --git-dir="${INSTALL_DIR}/.git" fetch origin tag "$(latest_version)" --depth=1 || {
             echo >&2 'Failed to fetch origin with tags. Please report this!'
             exit 2
         }
         else
-        command git -c advice.detachedHead=false clone "$(dbsync_source)" -b "$(dbsync_latest_version)" --depth=1 "${INSTALL_DIR}" || {
+        command git -c advice.detachedHead=false clone "$(code_source)" -b "$(latest_version)" --depth=1 "${INSTALL_DIR}" || {
             echo >&2 'Failed to clone dbsync repo. Please report this!'
             exit 2
         }
         fi
     fi
-    command git -c advice.detachedHead=false --git-dir="$INSTALL_DIR"/.git --work-tree="$INSTALL_DIR" checkout -f --quiet "$(dbsync_latest_version)"
+    command git -c advice.detachedHead=false --git-dir="$INSTALL_DIR"/.git --work-tree="$INSTALL_DIR" checkout -f --quiet "$(latest_version)"
     if [ -n "$(command git --git-dir="$INSTALL_DIR"/.git --work-tree="$INSTALL_DIR" show-ref refs/heads/master)" ]; then
         if command git --git-dir="$INSTALL_DIR"/.git --work-tree="$INSTALL_DIR" branch --quiet 2>/dev/null; then
         command git --git-dir="$INSTALL_DIR"/.git --work-tree="$INSTALL_DIR" branch --quiet -D master >/dev/null 2>&1
@@ -86,31 +86,31 @@ do_install() {
     fi
 
     local PROFILE_INSTALL_DIR
-    PROFILE_INSTALL_DIR="$(dbsync_install_dir | command sed "s:^$HOME:\$HOME:")"
-    SOURCE_STR="\\nexport DBSYNC_DIR=\"${PROFILE_INSTALL_DIR}\"\\nif [ -f \"\$DBSYNC_DIR/db-sync.sh\" ]; then\\n\t export PATH=\"$INSTALL_DIR:\$PATH\"\\nfi  # This loads db-sync\\n"
-    local DBSYNC_PROFILE
-    DBSYNC_PROFILE="${HOME}/.bashrc"
+    PROFILE_INSTALL_DIR="$(install_dir | command sed "s:^$HOME:\$HOME:")"
+    SOURCE_STR="\\nexport CODE_DIR=\"${PROFILE_INSTALL_DIR}\"\\nif [ -f \"\$CODE_DIR/account_create\" ]; then\\n\t export PATH=\"$INSTALL_DIR:\$PATH\"\\nfi  # This loads account_create\\n"
+    local PROFILE
+    PROFILE="${HOME}/.bashrc"
 
-    if ! command grep -qc '/db-sync.sh' "${DBSYNC_PROFILE}"; then
-      echo "=> Appending db-sync source string to ${DBSYNC_PROFILE}"
-      command printf "${SOURCE_STR}" >> "${DBSYNC_PROFILE}"
+    if ! command grep -qc '/account_create' "${PROFILE}"; then
+      echo "=> Appending account_create source string to ${PROFILE}"
+      command printf "${SOURCE_STR}" >> "${PROFILE}"
     else
-      echo "=> db-sync source string already in ${DBSYNC_PROFILE}"
+      echo "=> account_create source string already in ${PROFILE}"
     fi
 
-    \. "${DBSYNC_PROFILE}"
+    \. "${PROFILE}"
 
-    dbsync_reset
+    reset
 
-    echo "=> Close and reopen your terminal to start using db-sync.sh"
+    echo "=> Close and reopen your terminal to start using account_create"
 }
 
 #
 # Unsets the various functions defined
 # during the execution of the install script
 #
-dbsync_reset() {
-  unset -f dbsync_install_dir dbsync_latest_version dbsync_source do_install
+reset() {
+  unset -f install_dir latest_version code_source do_install
 }
 
 do_install
