@@ -7,7 +7,6 @@ fi
 
 # Check for the existance of pcs (Cluster)
 if ! command -v pcs &> /dev/null; then
-
   # Restart php-fpm
   sudo php-fpm -t &> /dev/null
   if [[ $? -ne 0 ]]; then

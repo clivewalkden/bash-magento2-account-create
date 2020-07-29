@@ -43,9 +43,12 @@ if [[ -n ${domain} ]] && [[ -n ${username} ]]; then
   # Create repo directory
   sudo mkdir -p "${vhosts_path}/${env_domain}/deployment/repo"
   # Create shared directory
-  sudo mkdir -p "${vhosts_path}/${env_domain}/deployment/shared"
+  sudo mkdir -p "${vhosts_path}/${env_domain}/deployment/shared/magento/var/nginx"
   # Create tmp directory
   sudo mkdir -p "${vhosts_path}/${env_domain}/deployment/tmp"
+  # Create the nginx log files
+  sudo touch "${vhosts_path}/${env_domain}/deployment/shared/magento/var/nginx/access.log"
+  sudo touch "${vhosts_path}/${env_domain}/deployment/shared/magento/var/nginx/error.log"
 
   # Give directories the correct permissions
   sudo find "${vhosts_path}/${env_domain}" -type d -print0 | sudo xargs --no-run-if-empty --null --max-procs=0 chmod 0775
