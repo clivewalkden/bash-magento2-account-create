@@ -7,7 +7,7 @@
   }
 
   latest_version() {
-    echo "master"
+    echo "v1.0.0"
   }
 
   #
