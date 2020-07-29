@@ -8,6 +8,6 @@ This script asks a series of questions and then creates a linux account, and con
 ## Installing and Updating
 To install or update the script run the following curl script
 
-```curl -o- https://raw.githubusercontent.com/clivewalkden/bash-magento2-account-create/v1.0.0/install.sh | bash```
+```curl -o- https://raw.githubusercontent.com/clivewalkden/bash-magento2-account-create/v1.0.1/install.sh | bash```
 
 ## Usage
