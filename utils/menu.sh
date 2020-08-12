@@ -44,12 +44,12 @@ parse_commandline()
 		case "$_key" in
 			# See the comment of option '--full' to see what's going on here - principle is the same.
 			-h|--help)
-				dbsynchelp
+				accountcreatehelp
 				exit 0
 				;;
 			# See the comment of option '-f' to see what's going on here - principle is the same.
 			-h*)
-				dbsynchelp
+				accountcreatehelp
 				exit 0
 				;;
 			*)
