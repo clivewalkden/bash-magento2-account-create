@@ -49,7 +49,7 @@ if [[ -n ${domain} ]] && [[ -n ${username} ]]; then
   # Create magento2 directory
   sudo ln -s "${vhosts_path}/${env_domain}/deployment/releases/202001010000/magento/" "${vhosts_path}/${env_domain}/magento2"
   # Symlink the current directory
-  sudo ln -s "${vhosts_path}/${env_domain}/deployment/releases/202001010000" "${vhosts_path}/${env_domain}/deployments/current"
+  sudo ln -s "${vhosts_path}/${env_domain}/deployment/releases/202001010000" "${vhosts_path}/${env_domain}/deployment/current"
 
   # Set user ownership on created directories
   sudo chown -R "${env_username}:${env_username}" "${vhosts_path}/${env_domain}"
