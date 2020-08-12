@@ -26,8 +26,8 @@ if [[ -n ${domain} ]] && [[ -n ${username} ]]; then
   env_domain=${domain}
 
   # Create nginx virtualhost configuration
-  sudo sed -e "s/<domain>/${env_domain}/" -e "s/<phpfpm>/${env_username}/" "${phpfpm_path}/conf.d/default.conf_" | sudo tee "${phpfpm_path}/conf.d/${env_domain}.conf" > /dev/null
+  sudo sed -e "s/<domain>/${env_domain}/" -e "s/<user>/${env_username}/" -e "s/<phpfpm>/${env_username}/" "${phpfpm_path}/default.conf_" | sudo tee "${phpfpm_path}/${env_domain}.conf" > /dev/null
 
-  echo -e "\n${txt_blue}PHP FPM Pool configuration ${phpfpm_path}/conf.d/${env_domain}.conf created from ${phpfpm_path}/conf.d/default.conf_${txt_end}" 
+  echo -e "\n${txt_blue}PHP FPM Pool configuration ${phpfpm_path}/${env_domain}.conf created from ${phpfpm_path}/default.conf_${txt_end}" 
 
 fi

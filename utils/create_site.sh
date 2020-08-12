@@ -39,13 +39,28 @@ if [[ -n ${domain} ]] && [[ -n ${username} ]]; then
   # Create backups directory
   sudo mkdir -p "${vhosts_path}/${env_domain}/backups"
   # Create releases directory
-  sudo mkdir -p "${vhosts_path}/${env_domain}/deployment/releases"
+  sudo mkdir -p "${vhosts_path}/${env_domain}/deployment/releases/202001010000/magento"
   # Create repo directory
   sudo mkdir -p "${vhosts_path}/${env_domain}/deployment/repo"
   # Create shared directory
   sudo mkdir -p "${vhosts_path}/${env_domain}/deployment/shared/magento/var/nginx"
   # Create tmp directory
   sudo mkdir -p "${vhosts_path}/${env_domain}/deployment/tmp"
+  # Create magento2 directory
+  sudo ln -s "${vhosts_path}/${env_domain}/deployment/releases/202001010000/magento/" "${vhosts_path}/${env_domain}/magento2"
+  # Symlink the current directory
+  sudo ln -s "${vhosts_path}/${env_domain}/deployment/releases/202001010000" "${vhosts_path}/${env_domain}/deployments/current"
+
+  # Set user ownership on created directories
+  sudo chown -R "${env_username}:${env_username}" "${vhosts_path}/${env_domain}"
+
+  # Set deployer user permissions on required directories
+  sudo chown -R deployer:deployers "${vhosts_path}/${env_domain}" "${vhosts_path}/${env_domain}/backups" "${vhosts_path}/${env_domain}/magento2" "${vhosts_path}/${env_domain}/deployment/repo"
+
+  # Set permissions ready
+  sudo find "${vhosts_path}/${env_domain}" -type d -print0 | sudo xargs --no-run-if-empty --null --max-procs=0 chmod 770
+  sudo find "${vhosts_path}/${env_domain}" -type f -print0 | sudo xargs --no-run-if-empty --null --max-procs=0 chmod 660
+
   # Create the nginx log files
   sudo touch "${vhosts_path}/${env_domain}/deployment/shared/magento/var/nginx/access.log"
   sudo touch "${vhosts_path}/${env_domain}/deployment/shared/magento/var/nginx/error.log"

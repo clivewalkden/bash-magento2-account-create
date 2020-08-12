@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [v1.0.2] - 2020-08-12
+### Added
+- Added Nginx and PHP-FPM templates to project
+- Added missing current symlink
+
+### Fixed
+- Updated Nginx and PHP-FPM templates to point log folders to deployment
+- Aliases now point to the correct domains by default
+
+
 ## [v1.0.1] - 2020-07-29
 ### Fixed
 - Added missing access.log and error.log creation during 

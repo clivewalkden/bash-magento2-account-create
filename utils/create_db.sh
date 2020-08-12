@@ -45,9 +45,15 @@ if [[ -n ${username} ]]; then
         # create production database
         mysql -e "CREATE DATABASE IF NOT EXISTS live_${username}_${db};";
 
-        # grant basic permissions
-        mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, DROP, INDEX ON \`live_${username}_${db}\`.* TO \`${dbusername}\`@\`10.1.0.%\`;"
-        mysql -e "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, DROP, INDEX ON \`live_${username}_${db}\`.* TO \`${dbusername}\`@\`localhost\`;"
+        if [[ ${db} == 'm2' ]]; then
+          # Grant Magento permissions
+          mysql -e "GRANT ALTER, ALTER ROUTINE, CREATE, CREATE ROUTINE, CREATE TEMPORARY TABLES, CREATE VIEW, DELETE, DROP, EVENT, EXECUTE, INDEX, INSERT, LOCK TABLES, REFERENCES, SELECT, SHOW VIEW, TRIGGER, UPDATE ON \`live_${username}_${db}\`.* TO \`${dbusername}\`@\`10.1.0.%\`;"
+          mysql -e "GRANT ALTER, ALTER ROUTINE, CREATE, CREATE ROUTINE, CREATE TEMPORARY TABLES, CREATE VIEW, DELETE, DROP, EVENT, EXECUTE, INDEX, INSERT, LOCK TABLES, REFERENCES, SELECT, SHOW VIEW, TRIGGER, UPDATE ON \`live_${username}_${db}\`.* TO \`${dbusername}\`@\`localhost\`;"
+        else
+          # Grant WordPress permissions
+          mysql -e "GRANT ALTER, CREATE, DELETE, DROP, INDEX, INSERT, SELECT, UPDATE ON \`live_${username}_${db}\`.* TO \`${dbusername}\`@\`10.1.0.%\`;"
+          mysql -e "GRANT ALTER, CREATE, DELETE, DROP, INDEX, INSERT, SELECT, UPDATE ON \`live_${username}_${db}\`.* TO \`${dbusername}\`@\`localhost\`;"
+        fi
 
         # apply changes
         mysql -e "FLUSH PRIVILEGES;"
