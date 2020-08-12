@@ -25,7 +25,7 @@ _arg_full="off"
 
 accountcreatehelp() {
   cat <<-HEREDOC
-  Magento 2 Account Creation v1.0.1
+  Magento 2 Account Creation v1.0.2
 
   Create a user account and create the correct directories, nginx & PHP configuration.
 

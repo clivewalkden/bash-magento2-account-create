@@ -7,7 +7,7 @@
   }
 
   latest_version() {
-    echo "v1.0.1"
+    echo "v1.0.2"
   }
 
   #
